@@ -154,7 +154,7 @@ table.inner{border: 0px}
 </td>
  </tr>
   
- <!----- Last Name -------------------->
+ <!-- Last Name -------------------->
  <tr>
  <td>LAST NAME</td>
  <td><input type="text" name="Last_Name" 
@@ -331,23 +331,30 @@ table.inner{border: 0px}
  <!----- Hobbies ------------->
   
  <tr>
- <td>EXTRA CURRICULAR <br /><br /><br /></td>
-  
- <td>
- BasketBall
- <input type="checkbox" name="check_list[]" value="EC_BASKETBALL" />
- Football
- <input type="checkbox" name="check_list[]" value="EC_FOOTBALL" />
- Soccer
- <input type="checkbox" name="check_list[]" value="EC_SOCCER" />
- Music
- <input type="checkbox" name="check_list[]" value="EC_MUSIC" />
- <br />
- Others
- <input type="checkbox" name="EC_OTHER" value="EC_OTHER">
- <input type="text" name="Other_Hobby" maxlength="30" />
- </td>
- </tr>
+<td>EXTRA CURRICULAR <br /><br /><br /></td>
+<td>
+    <select name="extra" id="extra">
+    <?php
+        $host = "localhost";
+        $username = "root";
+        $password =  "";
+        $database = "universitydb";
+        $endl = "\n";
+        $query = "SELECT extracurricularname FROM extracurricularactivities";
+        $connection =  new mysqli($host, $username, $password, $database);
+        if($connection->connect_error) {
+        die("Connection error: " . $connection->connect_error);    
+        }
+        $result = $connection->query($query);  
+        if($result->num_rows > 0) {
+        while($activity = $result->fetch_assoc()) {
+            echo "<option>" . $activity['extracurricularname'] . "</option>";      
+        }
+        }
+        $connection->close();
+    ?>
+    </select>
+</tr>
   
  
   
