@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+
     <style>
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
         .row.content {
@@ -32,6 +36,25 @@
         $(document).ready(function() {
             $("degree").val("Bachelors")
             getMajors({value: "Bachelors"});
+
+
+            function decimalToGPA(x) {
+
+            }
+
+            $("#range-slider-gpa").slider({
+                range: true,
+                min: 200,
+                max: 400,
+                values: [ 270, 400 ],
+                slide: function( event, ui ) {
+                    $( "#amount" ).val( ui.values[ 0 ]/100.0 + " - " + parseFloat(ui.values[ 1 ]/100.0) );
+                }
+            });
+
+
+            $( "#amount" ).val( $( "#range-slider-gpa" ).slider( "values", 0 )/100.0 + " - " + $( "#range-slider-gpa" ).slider( "values", 1 )/100.0 );
+
         });
 
 
@@ -62,6 +85,11 @@ $degrees = ["Bachelors", "Masters", "PhD"];
 $extra_curriculars = [];
 $extra_curriculars_query = "SELECT extracurricularname FROM extracurricularactivities";
 
+
+$regions = [];
+$region_query = "SELECT state, region FROM stateregion ORDER BY state ASC ";
+
+
 if ($conn->connect_error) {
     die("connection failed: " . $conn->connect_error);
 } else {
@@ -72,6 +100,15 @@ if ($conn->connect_error) {
             array_push($extra_curriculars, $row['extracurricularname']);
         }
     }
+
+    $response = $conn->query($region_query);
+    if ($response->num_rows > 0) {
+        while ($row = $response->fetch_assoc()) {
+            array_push($regions, $row['state'] . " - " . $row['region']);
+        }
+    }
+
+
 }
 
 ?>
@@ -145,17 +182,32 @@ if ($conn->connect_error) {
                     }
                     ?>
                 </select><br>
-                <label for="region">Region</label> <input type="text" class="form-control" placeholder="Search"/><br>
-                <label for="gpa">GPA</label>
-                <select class="form-control" id="gpa" name="gpa">
+                <label for="region">Region</label>
+                <select class="form-control" id="region">
                     <?php
+                        foreach ($regions as $region) {
+                            echo "<option>" . $region . "</option>";
+                        }
+                    ?>
+                </select><br>
+                <p>
+                    <label for="amount">GPA range:</label>
+                    <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                </p>
+                <div id="range-slider-gpa"></div>
+
+
+<!--
+                <select class="form-control" id="gpa" name="gpa">
+                    <?php /*
                     $start = 2.0;
                     while ($start <= 4) {
                         echo "<option>$start</option><br>";
                         $start += 0.1;
-                    }
+                    }*/
                     ?>
-                </select> <br>
+                </select> <a href="#" >Range</a> <br> -->
+
                 <button type="submit" class="btn btn-default" name="submit">Submit</button>
 
             </form>
