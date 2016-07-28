@@ -4,7 +4,7 @@ Repository for the UI layer
 Steps for deploying in your local env:
 ======================================
 
-1) Download the UI repository via Git Desktop client / Broswer / cli - `git clone https://github.com/Jagannath6160/UI`
+1) Download the UI repository via Git Desktop client / Browser / cli - `git clone https://github.com/Jagannath6160/UI`
 
 2) Move the UI folder to XAMPP/xamppfiles/htdocs
 
