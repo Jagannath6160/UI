@@ -1,7 +1,5 @@
 <?php 
-session_start();
-if(isset($_SESSION['staff_email'])) {
-	unset($_SESSION['staff_email']);
-}
+session_destroy();
+header("Location: staff_login.php");
+die();
 ?>
-<h3> You have successgfully logged out</h3>
