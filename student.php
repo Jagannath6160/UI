@@ -8,11 +8,13 @@ $student_Email = $_POST["Email_Id"];
 $student_Mobile = $_POST["Mobile_Number"];
 if(isset($_POST["Gender"])){
     $student_Gender = $_POST["Gender"];
+    
 }
 
-$student_major = $_POST["major"];
+//$student_major = $_POST["major"];
 if(isset($_POST["course"])){
     $student_degree = $_POST["course"];
+    
 }
 $student_Address = $_POST["Address"].$_POST["City"].$_POST["Pin_Code"].$_POST["State"].$_POST["Country"];
 $student_Extra = [];
@@ -36,42 +38,29 @@ for($x=0;$x < $count ; $x++){
 $host ='localhost';
 $password='';
 $user='root';
-$db='StudentDatabase';
-$table = 'person';
+$db='UNIVERSITYDB';
+$table = 'contacts';
 
 $con = mysqli_connect($host,$user,$password,$db);
 
 if($con){
-    echo "Connected Succesfully";
+    //echo "Connected Succesfully";
     
     
 }
 
 
-$insert_query = 'insert into '.$table.'(email,fname,lname,gender,phonenumber,dob,streetaddress,city,state,pincode,
-                role) values ("' . $student_Email . '","' . $student_FName . '","' . $student_LName . '","' . $student_Gender . '","' . $student_Mobile . '",
-                "' . $student_DOB . '",
-                "' . $student_Address . '",
-                "",
-                "",
-                "",
-                ""
-                )';
+$insert_query = 'insert into '.$table.'(email,phone,preferredContact) values ("' . $student_Email . '","' . $student_Mobile . '","")';
                 
-                
-                 
      if(!mysqli_query($con,$insert_query))
         {
-            echo ("Error inserting data to the table\nquery:$insert_query");
+            echo '<script type="text/javascript">alert("Error while inserting data in database");</script>';
+            echo("Error description: " . mysqli_error($con));
          
         } else{
-            echo ("Successfully inserted the data");
+            echo '<script type="text/javascript">alert("Inserted data successfully");</script>';
         }
-
-
 }   
-
-
 
 ?>
 <!DOCTYPE html>
@@ -362,17 +351,25 @@ table.inner{border: 0px}
  <tr>
  <td>DEGREE<br />SEEKING</td>
  <td>
- BS<input type="radio" name="course" value="BS"/>
- MS<input type="radio" name="course" value="MS"/>
- PHD<input type="radio" name="course" value="PHD"/>
+ BS<input type="radio" id ="course" name="course" value="BS" />
+ MS<input type="radio" id ="course" name="course" value="MS"/>
+ PHD<input type="radio" id ="course" name="course" value="PHD"/>
+
  
  </td>
  </tr>
  
+ 
  <!----- MAJOR INTERESTED IN ------------->
  <tr>
+    
  <td>MAJOR INTERESTED IN</td>
- <td><input type="text" name="major" maxlength="30"/></td>
+ <td><select id="major">
+    
+ </select></td>
+ </tr>
+   <!--<input type="text" name="major" maxlength="30"/></td> >
+ 
  
  </tr>
   
@@ -390,4 +387,14 @@ table.inner{border: 0px}
  </form>
   
  </body>
+<script type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+$("input[name=course]:radio").change(function(){
+    var deg = $('input[name=course]:checked').val();
+    $.post('degmajor.php',{deg:deg}, function(data){
+    $("#major").append(data);
+   });
+});
+</script>
  </html>
