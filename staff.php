@@ -63,6 +63,10 @@
                 $("#searchDiv").show();
             });
 
+            $("#searchBtn").click(function(){
+            	$("#results").show();
+            });
+
 
             function decimalToGPA(x) {
 
@@ -246,19 +250,20 @@ if ($conn->connect_error) {
 
         </div>
 
-        <button type="submit" class="btn btn-default"name="submit" style="margin-left: 30px">Submit</button>
+        <button id="searchBtn" type="submit" class="btn btn-default"name="submit" style="margin-left: 30px">Submit</button>
         </form>
 
 
     <div style="width: 700px">
 
-        <div class="panel panel-default">
+        <div id="results" class="panel panel-default">
             <div class="panel-heading">Result</div>
             <table class="table">
                 <thead> <tr><th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
                 <tbody>
 
                 <?php
+                if(isset($_POST['submit'])) {
                 $degree = $_POST['degree'];
                 $major = $_POST['major'];
                 $extra_curricular = $_POST['eca'];
@@ -292,7 +297,7 @@ if ($conn->connect_error) {
 
                 }
                 $conn->close();
-
+				}
                 ?>
                 </tbody>
             </table> </div>
