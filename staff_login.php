@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" id="htmlStaff">
     <head>
         <title>Staff Login</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="style/main.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-    <h4>Welcome to the Staff login Page</h4>
-    <h5>Please login with your credentials</h5>
+  
+    
     </head>
     <body>
-        <form method="POST">
+        <h4 class ="h">Welcome to the Staff login Page</h4>
+        
+        <div class="staff_form_div">
+            <form method="POST" id="formContent_registerPage">
             <label for="email"> Email</label>
             <input name="email" type="email" required/>
             <br>
@@ -20,6 +23,9 @@
             <input name="password" type="password" required/><br>
             <button name="submit" type="submit">login</button>
             </form>
+       
+        </div>
+        
     </body>
 </html>
 
