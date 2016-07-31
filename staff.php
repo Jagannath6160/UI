@@ -42,7 +42,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#degree").val("Bachelors")
+            $("#degree").val("Bachelors");
             getMajors({value: "Bachelors"});
             $("#infoDiv").hide();
             $("#searchDiv").show();
@@ -66,11 +66,6 @@
             $("#searchBtn").click(function(){
             	$("#results").show();
             });
-
-
-            function decimalToGPA(x) {
-
-            }
 
             $("#range-slider-gpa").slider({
                 range: true,
@@ -259,7 +254,7 @@ if ($conn->connect_error) {
         <div id="results" class="panel panel-default">
             <div class="panel-heading">Result</div>
             <table class="table">
-                <thead> <tr><th>First Name</th> <th>Last Name</th> <th>Username</th> </tr> </thead>
+                <thead> <tr><th>First Name</th> <th>Last Name</th> <th>Email</th> </tr> </thead>
                 <tbody>
 
                 <?php
@@ -289,8 +284,8 @@ if ($conn->connect_error) {
                             $ema = $row['email'];
                             $fname = $row['firstname'];
                             $lname = $row['lastname'];
-
-                            echo "<tr><td>$fname</td><td>$lname</td><td>$ema</td></tr>";
+							$get_tag = "<a href=\"student_profile.php?stud_email=$ema\">$ema</a>";
+                            echo "<tr><td>$fname</td><td>$lname</td><td>$get_tag</td></tr>";
 
                         }
                     }
