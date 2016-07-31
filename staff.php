@@ -170,7 +170,7 @@ if ($conn->connect_error) {
             <ul class="nav nav-pills nav-stacked">
                 <li id="infoTab"><a href="#section1">My Information</a></li>
                 <li id="searchTab"><a href="#section2">Search Students</a></li>
-                <li id="signoutTab"><a href="signout.php">Logout</a></li>
+                <li id="signoutTab"><a href="staff_signout.php">Logout</a></li>
             </ul>
             <br>
         </div>
