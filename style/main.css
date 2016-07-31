@@ -1,0 +1,71 @@
+
+#htmlRegister {
+    
+  background: url("images/charlotteDownTown_registerPage.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    
+}
+ #h1 {
+    color: white;
+    margin-left: 35%;
+    
+  
+    
+ }
+ 
+ .register_form_div{
+  background-color: #5bace3;
+ border-radius: 10px;
+  
+   
+  opacity: 0.8;
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  margin: -90px 0 0 -150px;
+  border:groove;
+  border-style: groove;
+ }
+ 
+ #formContent_registerPage{
+  position: relative;
+  width: 50%;
+  height: 50%;
+  top: 10%;
+  margin:  8px;
+  
+ }
+ 
+ .textColors {
+  
+  font-weight: bolder;
+  
+  color: white;
+  margin: 3px;
+  font-size: 12pt;
+ }
+ 
+ .inputBoxes {
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+   font-size:15pt;
+   margin: 4px;
+     height:20px;
+     width:200px;
+ }
+ 
+ #submit {
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+  width: 100px; height: 50px;
+  font-size: medium;
+  margin-left: 55px;
+ }
