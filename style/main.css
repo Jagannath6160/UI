@@ -1,7 +1,7 @@
 
 #htmlRegister {
     
-  background: url("images/charlotteDownTown_registerPage.jpg") no-repeat center center fixed; 
+  background: url("charlotteDownTown_registerPage.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -71,7 +71,7 @@ border-radius: 10px;
  /* for staff login */
  #htmlStaff {
     
-  background: url("images/staff_login.jpg") no-repeat center center fixed; 
+  background: url("staff_login.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

@@ -14,10 +14,9 @@
     <style>
 
         .mybox {
-            width: 200px;
+            width: 280px;
             float: left;
-            margin-right: 20px;
-            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
         /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
@@ -37,12 +36,19 @@
                 height: auto;
             }
         }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            min-height: 100%;
+        }
     </style>
 
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#degree").val("Bachelors");
             getMajors({value: "Bachelors"});
             $("#infoDiv").hide();
             $("#searchDiv").show();
@@ -63,15 +69,15 @@
                 $("#searchDiv").show();
             });
 
-            $("#searchBtn").click(function(){
-            	$("#results").show();
+            $("#searchBtn").click(function () {
+                $("#results").show();
             });
 
             $("#range-slider-gpa").slider({
                 range: true,
                 min: 200,
                 max: 400,
-                values: [270, 400],
+                values: [200, 400],
                 slide: function (event, ui) {
                     $("#amount").val(ui.values[0] / 100.0 + " - " + parseFloat(ui.values[1] / 100.0));
                 }
@@ -85,7 +91,7 @@
                 range: true,
                 min: 100,
                 max: 1400,
-                values: [100, 1200],
+                values: [100, 1400],
                 slide: function (event, ui) {
                     $("#satGre").val(ui.values[0] + " - " + parseFloat(ui.values[1]));
                 }
@@ -104,6 +110,7 @@
             }).done(function (data) {
                 options = $("#major");
                 options.empty();
+                //		options.append($("<option />").text("All"));
                 $.each(JSON.parse(data), function () {
                     options.append($("<option />").text(this.toString()));
                 });
@@ -125,7 +132,7 @@ $degrees = ["Bachelors", "Masters", "PhD"];
 $extra_curriculars = [];
 $extra_curriculars_query = "SELECT extracurricularname FROM extracurricularactivities";
 
-
+$states = [];
 $regions = [];
 $region_query = "SELECT state, region FROM stateregion ORDER BY state ASC ";
 
@@ -144,7 +151,8 @@ if ($conn->connect_error) {
     $response = $conn->query($region_query);
     if ($response->num_rows > 0) {
         while ($row = $response->fetch_assoc()) {
-            array_push($regions, $row['state'] . " - " . $row['region']);
+            array_push($states, $row['state']);
+            $regions[$row['region']] = 1;
         }
     }
 
@@ -159,9 +167,9 @@ if ($conn->connect_error) {
 
 <div class="container-fluid">
     <div class="row content">
-        <div class="col-sm-3 sidenav hidden-xs">
-            <h2>Welcome, <?php session_start();
-                echo explode(" ", $_SESSION['staff_name'])[0] ?></h2>
+        <div class="col-sm-3 sidenav hidden-xs" style="width:200px">
+            <h4>Welcome, <?php session_start();
+                echo explode(" ", $_SESSION['staff_name'])[0] ?></h4>
             <ul class="nav nav-pills nav-stacked">
                 <li id="infoTab"><a href="#section1">My Information</a></li>
                 <li id="searchTab"><a href="#section2">Search Students</a></li>
@@ -183,124 +191,259 @@ if ($conn->connect_error) {
         <div class="col-sm-9" id="searchDiv">
             <h4>Search Students Criteria</h4>
             <form class="navbar-form navbar-left" role="search" method="post">
-                <div style="display=inline-block">
-                <div class="mybox">
-                    <label for="degree">Degree</label><br>
-                    <select class="form-control" id="degree" name="degree" onChange="getMajors(this)">
-                        <?php
-                        foreach ($degrees as $degree) {
-                            echo "<option>" . $degree . "</option><br>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="mybox">
-                <label for="major">Major</label>
-                    <select class="form-control" id="major" name="major">
-
-                    </select>
-                </div>
-
-                <div class="mybox">
-                    <label for="eca">Extra Curricular Interests</label>
-                    <select class="form-control" id="eca" name="eca">
-                        <?php
-                        foreach ($extra_curriculars as $activity) {
-                            echo "<option>$activity</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                    </div>
-
-
-
-                <div style="display=inline-block">
-
-                    <div class="mybox">
-                        <label for="region">Region</label>
-                        <select class="form-control" id="region" name="region">
+                <div style="display:inline-block">
+                    <div class="mybox" style="width:200px">
+                        <label for="degree">Degree</label><br>
+                        <select multiple class="form-control" id="degree" name="degrees[]" onChange="getMajors(this);">
                             <?php
-                            foreach ($regions as $region) {
-                                echo "<option>" . $region . "</option>";
+                            foreach ($degrees as $degree) {
+                                echo "<option>" . $degree . "</option><br>";
                             }
                             ?>
                         </select>
                     </div>
 
                     <div class="mybox">
-                        <label for="amount">GPA range:</label>
-                        <input type="text" id="amount" name="gpa" readonly style="border:0; color:#f6931f; font-weight:bold;">
-                        <div id="range-slider-gpa"></div>
+                        <label for="major">Major</label><br>
+                        <select multiple class="form-control" id="major" name="majors[]">
+                        </select>
                     </div>
 
                     <div class="mybox">
-                        <label for="satGre">SAT/GRE range:</label>
-                        <input type="text" id="satGre" name="satGre" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                        <label for="eca">Extra Curricular Interests</label><br>
+                        <select multiple class="form-control" id="eca" name="eca[]">
+                            <?php
+                            foreach ($extra_curriculars as $activity) {
+                                echo "<option>$activity</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div style="display:inline-block">
+
+                    <div class="mybox" style="width:200px">
+                        <label for="state">State</label><br>
+                        <select multiple class="form-control" id="state" name="states[]">
+
+                            <?php
+                            foreach ($states as $state) {
+                                echo "<option>" . $state . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mybox" style="width:200px">
+                        <label for="state">Region</label><br>
+                        <select multiple class="form-control" id="region" name="regions[]">
+
+                            <?php
+                            foreach ($regions as $region => $_) {
+                                echo "<option>" . $region . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="mybox" style="width:100px">
+                        <label for="amount">GPA range:</label><br>
+                        <input type="text" id="amount" name="gpa" readonly
+                               style="border:0; color:#f6931f; font-weight:bold;">
+                        <div id="range-slider-gpa"></div>
+                    </div>
+
+                    <div class="mybox" style="width:150px;margin-left:20px">
+                        <label for="satGre">SAT/GRE range:</label><br>
+                        <input type="text" id="satGre" name="satGre" readonly
+                               style="border:0; color:#f6931f; font-weight:bold;">
                         <div width="500px" id="range-slider-satGre"></div>
 
                     </div>
                 </div>
+                <div style="display:inline-block">
+                    <div class="mybox">
 
-        </div>
+                        <button id="searchBtn" type="submit" class="btn btn-default" name="submit">Submit</
+                        </button></div>
+                </div>
+            </form>
 
-        <button id="searchBtn" type="submit" class="btn btn-default"name="submit" style="margin-left: 30px">Submit</button>
-        </form>
 
-
-    <div style="width: 700px">
-
-        <div id="results" class="panel panel-default">
-            <div class="panel-heading">Result</div>
-            <table class="table">
-                <thead> <tr><th>First Name</th> <th>Last Name</th> <th>Email</th> </tr> </thead>
-                <tbody>
-
+            <div style="width:700px" id="results">
+                <b>Results</b>
                 <?php
-                if(isset($_POST['submit'])) {
-                $degree = $_POST['degree'];
-                $major = $_POST['major'];
-                $extra_curricular = $_POST['eca'];
-                $region = $_POST['region'];
-                list($gpa_low, $gpa_high) = explode(" - ", $_POST['gpa']);
-                list($sat_gre_low, $sat_gre_high) = explode(" - ", $_POST['satGre']);
+                if (isset($_POST['submit'])) {
+                    $degrees_0 = isset($_POST['degrees']) ? $_POST['degrees'] : false;
+                    $majors = isset($_POST['majors']) ? $_POST['majors'] : false;
+                    $extra_curriculars = isset($_POST['eca']) ? $_POST['eca'] : false;
+                    $states_0 = isset($_POST['states']) ? $_POST['states'] : false;
+                    $regions = isset($_POST['regions']) ? $_POST['regions'] : false;
+                    list($gpa_low, $gpa_high) = explode(" - ", $_POST['gpa']);
+                    list($sat_gre_low, $sat_gre_high) = explode(" - ", $_POST['satGre']);
 
-                $host = "localhost";
-                $user = "root";
-                $password = "";
-                $database = "universitydb";
-                $conn = new mysqli($host, $user, $password, $database);
+                    $degrees = $degrees_0 ? array_map(function ($item) {
+                        if ($item == "Bachelors")
+                            return "BS";
+                        if ($item == "Masters")
+                            return "MS";
+                        else return "PhD";
 
-                if ($conn->connect_error) {
-                    die("connection failed: " . $conn->connect_error);
-                } else {
-                    // fetching  majors by degree from the database
-                    $response = $conn->query('select firstname, lastname, email from aspiringstudent where (gpa between ' . $gpa_low .  ' and ' . $gpa_high .') and (testscore between '
-                        . $sat_gre_low . ' and ' . $sat_gre_high . ')');
-                    if ($response->num_rows > 0) {
-                        while ($row = $response->fetch_assoc()) {
+                    }, $degrees_0) : false;
 
-                            $ema = $row['email'];
-                            $fname = $row['firstname'];
-                            $lname = $row['lastname'];
-							$get_tag = "<a href=\"student_profile.php?stud_email=$ema\">$ema</a>";
-                            echo "<tr><td>$fname</td><td>$lname</td><td>$get_tag</td></tr>";
+
+                    $degrees_constraint = $degrees ? "(degree IN ('" . implode("', '", $degrees) . "'))" : false;
+                    $majors_constraint = $majors ? "(major IN ('" . implode("', '", $majors) . "'))" : false;
+                    if (count($degrees) > 1) {
+                        $majors_constraint = false;
+                    } else if (count($degrees) == 1) {
+                        if ($degrees[0] == 'BS') {
+                            $majors_table = "undergraduatedegree";
+                            $majors_constraint = $majors ? "(uspecialization IN ('" . implode("', '", $majors) . "'))" : false;
+                        } else {
+                            $majors_table = "graduatedegree";
+                            $majors_constraint = $majors ? "(gspecialization IN ('" . implode("', '", $majors) . "'))" : false;
 
                         }
                     }
 
+
+
+                    $states = [];
+                    if ($states_0) {
+                        $state_conv = ['Alabama' => 'AL','Alaska' => 'AK','Arizona' => 'AZ','Arkansas' => 'AR','California' => 'CA','Colorado' => 'CO','Connecticut' => 'CT','Delaware' => 'DE','Florida' => 'FL','Georgia' => 'GA','Hawaii' => 'HI','Idaho' => 'ID','Illinois' => 'IL','Indiana' => 'IN','International' => 'XX','Iowa' => 'IA','Kansas' => 'KS','Kentucky' => 'KY','Louisiana' => 'LA','Maine' => 'ME','Maryland' => 'MD','Massachusetts' => 'MA','Michigan' => 'MI','Minnesota' => 'MN','Mississippi' => 'MS','Missouri' => 'MO','Montana' => 'MT','Nebraska' => 'NE','Nevada' => 'NV','New Hampshire' => 'NH','New Jersey' => 'NJ','New Mexico' => 'NM','New York' => 'NY','North Carolina' => 'NC','North Dakota' => 'ND','Ohio' => 'OH','Oklahoma' => 'OK','Oregon' => 'OR','Pennsylvania' => 'PA','Rhode Island' => 'RI','South Carolina' => 'SC','South Dakota' => 'SD','Tennessee' => 'TN','Texas' => 'TX','Utah' => 'UT','Vermont' => 'VT','Virginia' => 'VA','Washington' => 'WA','Washington DC' => 'DC','West Virginia' => 'WV','Wisconsin' => 'WI','Wyoming' => 'WY'];
+                        foreach($states_0 as $state_) {
+                            array_push($states, $state_conv[$state_]);
+                        }
+                    }
+                    $states_constraint = $states ? "(state IN ('" . implode("', '", $states) . "'))" : false;
+                    $regions_constraint = $regions ? "(region IN ('" . implode("', '", $regions) . "'))" : false;
+                    $extra_curriculars_constraint = $extra_curriculars ? "(extracurricularname IN ('" . implode("', '", $extra_curriculars) . "'))" : false;
+                    $gpa_constraint = "(gpa BETWEEN $gpa_low AND $gpa_high)";
+                    $testscore_constraint = "(testscore BETWEEN $sat_gre_low AND $sat_gre_high)";
+
+
+                    $where_clause = implode(" AND ", array_filter([$degrees_constraint, $majors_constraint, $states_constraint, $regions_constraint,
+                        $extra_curriculars_constraint, $gpa_constraint, $testscore_constraint],
+                        function ($constraint) {
+                            return $constraint !== false;
+                        }));
+
+
+                    $statement = "SELECT DISTINCT email FROM aspiringstudent NATURAL JOIN seeking NATURAL JOIN $majors_table NATURAL JOIN address NATURAL JOIN enjoys NATURAL JOIN extracurricularactivities WHERE $where_clause";
+                    //    echo $statement;
+
+                    $host = "localhost";
+                    $user = "root";
+                    $password = "";
+                    $database = "universitydb";
+                    $conn = new mysqli($host, $user, $password, $database);
+
+                    if ($conn->connect_error) {
+                        die("connection failed: " . $conn->connect_error);
+                    } else {
+                        // fetching  majors by degree from the database
+                        $response_0 = $conn->query($statement);
+                        $output = [];
+                        if ($response_0->num_rows > 0) {
+                            while ($row_0 = $response_0->fetch_assoc()) {
+                                $stud_email = strtolower($row_0['email']);
+                                //                echo $stud_email;
+                                # from email get personal information
+                                $info_query = 'SELECT firstname, lastname, gpa, testscore FROM aspiringstudent WHERE email="' . $stud_email . '"';
+                                $response = $conn->query($info_query);
+                                if ($response->num_rows > 0) {
+                                    $info_row = $response->fetch_assoc();
+                                }
+
+                                //                echo print_r($info_row);
+
+                                # from email get majors information
+                                $majors_query = "SELECT degree, startdate, majorid FROM seeking WHERE email='" . $stud_email . "'";
+                                $response = $conn->query($majors_query);
+                                if ($response->num_rows > 0) {
+                                    $major_row = $response->fetch_assoc();
+                                }
+                                # from majorid, degree fetch major name
+                                $major_name_query = ($major_row['degree'] === "BS") ?
+                                    "SELECT uspecialization AS majorname FROM undergraduatedegree WHERE majorid='" . $major_row['majorid'] . "'" :
+                                    "SELECT gspecialization AS majorname FROM graduatedegree WHERE majorid='" . $major_row['majorid'] . "'";
+                                //                echo "#".$major_name_query ."#";
+                                $response = $conn->query($major_name_query);
+                                if ($response->num_rows > 0) {
+                                    $major_row['majorname'] = $response->fetch_assoc()['majorname'];
+                                }
+
+                                # from email get address
+                                $address_query = "SELECT streetname, city, state, zipcode, apartment, region FROM address WHERE email='$stud_email'";
+                                $response = $conn->query($address_query);
+                                if ($response->num_rows > 0) {
+                                    $info_row['address'] = $response->fetch_assoc();
+
+                                }
+
+
+                                # lets fetch extra curricular activities of the student
+                                $extra_curriculars_query = "SELECT extracurricularname AS name FROM enjoys AS
+                A, ExtraCurricularActivities AS B WHERE A.extracurricularid=B.extracurricularid and A.email='" . $stud_email . "'";
+                                $response = $conn->query($extra_curriculars_query);
+                                $info_row['extra_curricular_activities'] = [];
+                                if ($response->num_rows > 0) {
+                                    while ($row = $response->fetch_assoc()) {
+                                        array_push($info_row['extra_curricular_activities'], $row['name']);
+                                    }
+                                }
+                                $student = array_merge($info_row, $major_row);
+                                $output[$stud_email] = $student;
+                            }
+                        }
+                    }
+                    $conn->close();
                 }
-                $conn->close();
-				}
+                if (count($output) == 0) {
+                    echo "<script type=\"text/javascript\">$(\"#infoDiv\").hide();$(\"#results\").hide();alert('No students found for this criteria')</script>";
+                } else {
+                    $counter = 0;
+                    foreach ($output as $student) {
+                        $address = $student['address'];
+                        echo '
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse' . $counter . '">
+                        ' . $student['firstname'] . " " . $student['lastname'] . '</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse' . $counter . '" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <b>Aspiring for ' . ucfirst($student['degree']) . ' in ' . ucfirst($student['majorname']) . '</b>
+                                        <br><b>' . ($student['degree'] == "BS" ? "SAT" : "GRE") . ' score: </b>' . $student['testscore'] .
+                            '<br><b>' . ($student['degree'] == "BS" ? "High School" : "Graduate") . ' GPA: </b>' . $student['gpa'] .
+                            '<br><b>Extra Curricular Activities: </b>' . implode(", ", $student['extra_curricular_activities']) .
+                            '<br><b>Address:</b><br>' . $address['streetname'] . ' Apt ' . $address['apartment'] .
+                            '<br>' . $address['city'] . ', ' . $address['state'] . ' - ' . $address['zipcode'] .
+                            '
+                                        </div>
+                                    </div>
+                                </div>
+                        </td>
+                    </tr>';
+
+                        $counter++;
+                    }
+                }
+
                 ?>
-                </tbody>
-            </table> </div>
+
+
+            </div>
+        </div>
+
     </div>
 
-
 </div>
-
 
 </div>
 </div>
