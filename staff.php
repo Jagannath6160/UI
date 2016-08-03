@@ -59,7 +59,6 @@
                 $("#searchTab").removeClass("active");
                 $("#infoDiv").show();
                 $("#searchDiv").hide();
-
             });
 
             $("#searchTab").click(function () {
@@ -272,7 +271,6 @@ if ($conn->connect_error) {
 
 
             <div style="width:700px" id="results">
-                <b>Results</b>
                 <?php
                 if (isset($_POST['submit'])) {
                     $degrees_0 = isset($_POST['degrees']) ? $_POST['degrees'] : false;
@@ -400,11 +398,11 @@ if ($conn->connect_error) {
                         }
                     }
                     $conn->close();
-                }
-                if (count($output) == 0) {
+                          if (count($output) == 0) {
                     echo "<script type=\"text/javascript\">$(\"#infoDiv\").hide();$(\"#results\").hide();alert('No students found for this criteria')</script>";
                 } else {
                     $counter = 0;
+                    echo "<b>Results</b>";
                     foreach ($output as $student) {
                         $address = $student['address'];
                         echo '
@@ -435,6 +433,8 @@ if ($conn->connect_error) {
                     }
                 }
 
+                }
+          
                 ?>
 
 
