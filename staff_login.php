@@ -51,7 +51,7 @@ if(isset($_POST['email'])) {
                     $_SESSION['email'] = $email;
                     $_SESSION['staff_id'] = $row['id'];
                     $_SESSION['staff_name'] = $row['name'];
-                    header("Location: staff_login.php");
+                    header("Location: staff_home.php");
                     die();
                 } else {
                     echo '<script type="text/javascript">alert("The email and password you entered don\'t match.");</script>';
