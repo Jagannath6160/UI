@@ -1,28 +1,23 @@
+<!DOCTYPE html>
+<html>
 <?php
-session_start();
-?>
-<?php 
-$student_Email = $_SESSION["email"];
+  session_start();
+  $student_Email = $_SESSION['email'];
 ?>
 <?php
-if(isset($_POST["resource"])){
-    
+if(isset($_POST["resource"])){    
+  $resource = $_POST["resource"];
     $host = "localhost";
         $username = "root";
         $password =  "";
         $database = "universitydb";
         $endl = "\n";
-        $query = "SELECT idResource FROM resources";
         $connection =  new mysqli($host, $username, $password, $database);
         if($connection->connect_error) {
-        die("Connection error: " . $connection->connect_error);    
-        }
-        $result = $connection->query($query);  
-        if($result->num_rows > 0) {
-        while($activity = $result->fetch_assoc()) {
-            $resourceID = $activity['idResource'];
-            $insert_query = 'insert into clickson (email,idResource) values ("'.$student_Email . '","'.$resourceID.'")';
-        }
+          die("Connection error: " . $connection->connect_error);    
+        } 
+
+        $insert_query = 'insert into clickson (email,idResource) values ("'.$student_Email . '",'.$resource.')';
         if(!mysqli_query($connection,$insert_query))
         {
             echo '<script type="text/javascript">alert("Error while inserting data in database");</script>';
@@ -31,15 +26,11 @@ if(isset($_POST["resource"])){
         } else{
             echo '<script type="text/javascript">alert("Inserted data successfully");</script>';
         }
-            
-        }
         $connection->close();
 }
 ?>
 
 
-<!DOCTYPE html>
-<html>
     <head>
       <title>Resources</title>
       <meta charset="utf-8">
@@ -62,6 +53,15 @@ if(isset($_POST["resource"])){
           .row.content {height: auto;}
         }
       </style>
+
+    <script type="text/javascript">
+      function clicked(resource) {
+        $.post("", {"resource": resource}, function() {
+          console.log("success");
+        });
+      }      
+    </script>
+
     </head>
     <body>
 	
@@ -98,35 +98,35 @@ if(isset($_POST["resource"])){
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/source/resources/SportsUNCC.pdf" name = "resource"> Sports</a><br><br>
+            <a href="resources/SportsUNCC.pdf" name = "resource" onclick="clicked(1);"> Sports</a><br><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a href="/source/resources/CultureUNCC.pdf" name = "resource"> Campus Life</a><br><br>
+			<a href="resources/CultureUNCC.pdf" name = "resource" onclick="clicked(2);"> Campus Life</a><br><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/source/resources/LibraryUNCC.pdf" name = "resource"> Library</a><br><br>
+            <a href="resources/LibraryUNCC.pdf" name = "resource" onclick="clicked(4);"> Library</a><br><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/source/resources/AdmissionsUNCC.pdf" name = "resource"> Admissions</a><br><br>
+            <a href="resources/AdmissionsUNCC.pdf" name = "resource" onclick="clicked(5);"> Admissions</a><br><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="/source/resources/HousingUNCC.pdf" name = "resource"> Housing</a><br><br>
+            <a href="resources/HousingUNCC.pdf" name = "resource" onclick="clicked(3);">  Housing </a><br><br>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -137,6 +137,7 @@ if(isset($_POST["resource"])){
         </div>
       </div>
     </div>
+
     </body>
 
 </html>
